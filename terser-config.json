@@ -1,0 +1,8 @@
+{
+    "compress" : {},
+
+    "ecma" : 2015,
+
+    "ie8" : true,
+    "safari10" : true
+}
