@@ -7,6 +7,7 @@ int main(int argc, char *argv[])
     float b = atof( argv[3] );
 
     switch ( *argv[2] ) {
+
         case '+':
             printf("%g\n", a + b);
         break;
@@ -22,6 +23,7 @@ int main(int argc, char *argv[])
         case '/':
             printf("%g\n", a / b);
         break;
+
     }
 
     return 0;
