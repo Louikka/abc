@@ -47,6 +47,10 @@ if (not (len(args) - 1)):
 if (args.count("-info")):
     print("""
 # Build on python 3.13.2
+
+# Also, fun fact : when generating 8-symbols id using only lowercase letters
+# the probability of getting two exactly identical id's is ~4.79e-12 (or
+# approx. 0.0000000005%).
     """)
     sys.exit()
 
