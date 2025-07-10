@@ -1,10 +1,10 @@
-##
-# Build on Python 3.13.2
-##
+# python 3.13.2
 
 import sys
 import string
 import random
+import re
+
 
 
 def getCLIArgumentValue(key):
@@ -17,20 +17,25 @@ def getRandomPositionValue(iterable):
 
 
 args = sys.argv
-# cli arguments :
+# CLI arguments :
 #   -len [number] = length of the id
-#   -mode [type] = type of included symbols (see below)
-#   -help / -elp = print this comment
+#   -mode [type] = type of included symbols
+#   -info = print info about this program
+#   -help / -elp = print this message
 
-# possible values of -mode [type] argument :
-#     'abc' = only letters (both cases)
-#     'abc123' = letters and digits
-#     'abc123+' = letters, digits and '_' symbol
-# if omitted, takes default ('abc')
+# The value of -mode [type] argument must be combination of flags as listed here
+# below. If omitted, takes default ('lLd').
+#   'l' = lower case letters
+#   'L' = upper case letters
+#   'd' = digits
+#   'h' = hexidigits
+#   'o' = octdigits
+# for example :
+#   flag 'lLh' will generate an id with both case letters and hexidigits.
 
 if (not (len(args) - 1)):
     args_len = input("Length of id : ") or "0"
-    args_mode = input("Mode type : ") or "abc"
+    args_mode = input("Mode type : ") or "lLd"
 
     args.extend([
         '-len', args_len,
@@ -38,42 +43,64 @@ if (not (len(args) - 1)):
     ])
 
 
+# -info
+if (args.count("-info")):
+    print("""
+# Build on python 3.13.2
+    """)
+    sys.exit()
+
+# -help
 if (args.count("-help") or args.count("-elp")):
     print("""
-# cli arguments :
+# CLI arguments :
 #   -len [number] = length of the id
-#   -mode [type] = type of included symbols (see below)
-#   -help / -elp = print this comment
+#   -mode [type] = type of included symbols
+#   -info = print info about this program
+#   -help / -elp = print this message
 
-# possible values of -mode [type] argument :
-#     'abc' = only letters (both cases)
-#     'abc123' = letters and digits
-#     'abc123+' = letters, digits and '_' symbol
-# if omitted, takes default ('abc')
+# The value of -mode [type] argument must be combination of flags as listed here
+# below. If omitted, takes default ('lLd').
+#   'l' = lower case letters
+#   'L' = upper case letters
+#   'd' = digits
+#   'h' = hexidigits
+#   'o' = octdigits
+# for example :
+#   flag 'lLh' will generate an id with both case letters and hexidigits.
     """)
     sys.exit()
     
 
+# length
 try:
-    l = int( getCLIArgumentValue('len') )
+    id_length = int( getCLIArgumentValue('len') )
 except:
-    print(f"'{getCLIArgumentValue('len')}' is not a number.")
+    print(f"'{ getCLIArgumentValue('len') }' is not a number.")
     sys.exit()
 
-match (getCLIArgumentValue('mode')):
-    case 'abc':
-        s = string.ascii_letters
-    case 'abc123':
-        s = "".join([string.ascii_letters, string.digits])
-    case 'abc123+':
-        s = "".join([string.ascii_letters, string.digits, '_'])
-    case _:
-        print(f"Mode '{getCLIArgumentValue('mode')}' is not defined.")
-        sys.exit()
+# mode
+s = ""
+
+if (re.search(r'l', getCLIArgumentValue('mode'))):
+    s = "".join([s, string.ascii_lowercase])
+if (re.search(r'L', getCLIArgumentValue('mode'))):
+    s = "".join([s, string.ascii_uppercase])
+if (re.search(r'd', getCLIArgumentValue('mode'))):
+    s = "".join([s, string.digits])
+if (re.search(r'h', getCLIArgumentValue('mode'))):
+    s = "".join([s, string.hexdigits])
+if (re.search(r'o', getCLIArgumentValue('mode'))):
+    s = "".join([s, string.octdigits])
+
+if (not len(s)):
+    print(f"Mode '{ getCLIArgumentValue('mode') }' is not defined.")
+    sys.exit()
+
 
 a = ""
 
-for n in range(l):
+for n in range(id_length):
     a += getRandomPositionValue(s)
     
 print(a)
