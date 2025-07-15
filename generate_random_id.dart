@@ -4,9 +4,9 @@ import 'dart:math';
 
 void main(List<String> argv) {
 
-    if (argv.length == 0) return print('No CLI arguments provided.\n');
+    if (argv.length == 0) return print('No CLI arguments provided (use \'-help\' for more information).\n');
 
-    if (getCLIArgumentValue(argv, 'info') != '') {
+    if (argv.contains('-info')) {
 
         print(
             'Build on Dart SDK v3.8.1\n\n'
@@ -18,7 +18,7 @@ void main(List<String> argv) {
 
     }
 
-    if (getCLIArgumentValue(argv, 'help') != '' || getCLIArgumentValue(argv, 'elp') != '') {
+    if (argv.contains('-help') || argv.contains('-elp')) {
 
         print(
             'CLI arguments :\n'
@@ -65,6 +65,8 @@ void main(List<String> argv) {
     if (getCLIArgumentValue(argv, 'mode').contains('d')) s += '0123456789';
     if (getCLIArgumentValue(argv, 'mode').contains('h')) s += '0123456789abcdefABCDEF';
     if (getCLIArgumentValue(argv, 'mode').contains('o')) s += '01234567';
+
+    if (getCLIArgumentValue(argv, 'mode') == '') s += 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
     if (s.length == 0) {
 
