@@ -8,43 +8,40 @@ import re
 
 
 def getCLIArgumentValue(key):
-    return args[args.index(f"-{key}") + 1]
+    i = sys.argv.index(key)
 
-def getRandomPositionValue(iterable):
-    i = random.randint(0, (len(iterable) - 1))
-    return iterable[i]
+    if ((i + 1) >= len(sys.argv)):
+        return None
+    else:
+        return sys.argv[i + 1]
+
+def getRandomCharInString(s):
+    i = random.randint(0, (len(s) - 1))
+    return s[i]
 
 
 
 args = sys.argv
-# CLI arguments :
-#   -len [number] = length of the id
-#   -mode [type] = type of included symbols
-#   -info = print info about this program
-#   -help / -elp = print this message
+defLen = "8"
+defMode = "lLd"
 
-# The value of -mode [type] argument must be combination of flags as listed here
-# below. If omitted, takes default ('lLd').
-#   'l' = lower case letters
-#   'L' = upper case letters
-#   'd' = digits
-#   'h' = hexidigits
-#   'o' = octdigits
-# for example :
-#   flag 'lLh' will generate an id with both case letters and hexidigits.
-
-if (not (len(args) - 1)):
-    args_len = input("Length of id : ") or "0"
-    args_mode = input("Mode type : ") or "lLd"
+if not (len(args) - 1):
+    args_len = input("Length of id : ") or defLen
+    args_mode = input("Mode type : ") or defMode
 
     args.extend([
         '-len', args_len,
         '-mode', args_mode,
     ])
 
+if not args.count('-len'):
+    args.extend([ '-len', defLen ])
+if not args.count('-mode'):
+    args.extend([ '-mode', defMode ])
+
 
 # -info
-if (args.count("-info")):
+if args.count('-info'):
     print("""
 # Build on python 3.13.2
 
@@ -55,7 +52,7 @@ if (args.count("-info")):
     sys.exit()
 
 # -help
-if (args.count("-help") or args.count("-elp")):
+if (args.count('-help') or args.count('-elp')):
     print("""
 # CLI arguments :
 #   -len [number] = length of the id
@@ -74,37 +71,38 @@ if (args.count("-help") or args.count("-elp")):
 #   flag 'lLh' will generate an id with both case letters and hexidigits.
     """)
     sys.exit()
-    
+
 
 # length
 try:
-    id_length = int( getCLIArgumentValue('len') )
-except:
-    print(f"'{ getCLIArgumentValue('len') }' is not a number.")
+    id_length = int( getCLIArgumentValue('-len') )
+except Exception as err:
+    print( str(err) )
     sys.exit()
 
 # mode
 s = ""
+argValue = getCLIArgumentValue('-mode')
 
-if (re.search(r'l', getCLIArgumentValue('mode'))):
+if re.search(r'l', argValue):
     s = "".join([s, string.ascii_lowercase])
-if (re.search(r'L', getCLIArgumentValue('mode'))):
+if re.search(r'L', argValue):
     s = "".join([s, string.ascii_uppercase])
-if (re.search(r'd', getCLIArgumentValue('mode'))):
+if re.search(r'd', argValue):
     s = "".join([s, string.digits])
-if (re.search(r'h', getCLIArgumentValue('mode'))):
+if re.search(r'h', argValue):
     s = "".join([s, string.hexdigits])
-if (re.search(r'o', getCLIArgumentValue('mode'))):
+if re.search(r'o', argValue):
     s = "".join([s, string.octdigits])
 
-if (not len(s)):
-    print(f"Mode '{ getCLIArgumentValue('mode') }' is not defined.")
+if not len(s):
+    print(f"Mode '{ argValue }' is not defined.")
     sys.exit()
 
 
 a = ""
 
 for n in range(id_length):
-    a += getRandomPositionValue(s)
-    
+    a += getRandomCharInString(s)
+
 print(a)
