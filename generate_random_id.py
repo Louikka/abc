@@ -3,7 +3,6 @@
 import sys
 import string
 import random
-import re
 
 
 
@@ -84,15 +83,15 @@ except Exception as err:
 s = ""
 argValue = getCLIArgumentValue('-mode')
 
-if re.search(r'l', argValue):
+if 'l' in argValue:
     s = "".join([s, string.ascii_lowercase])
-if re.search(r'L', argValue):
+if 'L' in argValue:
     s = "".join([s, string.ascii_uppercase])
-if re.search(r'd', argValue):
+if 'd' in argValue:
     s = "".join([s, string.digits])
-if re.search(r'h', argValue):
+if 'h' in argValue:
     s = "".join([s, string.hexdigits])
-if re.search(r'o', argValue):
+if 'o' in argValue:
     s = "".join([s, string.octdigits])
 
 if not len(s):
