@@ -15,3 +15,5 @@ The value of `-mode [type]` argument must be combination of the flags =><br />
 &emsp;`o` for octdigits.
 
 > For example, flag `lLh` will generate an id with both case letters and hexidigits.
+
+Also, the value of `-mode [type]` argument can be `custom=[symbols]`, i.e. user-defined combination of symbols.
